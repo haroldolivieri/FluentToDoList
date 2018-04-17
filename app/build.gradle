@@ -1,0 +1,102 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+HashMap<String, String> baseDependencies = rootProject.ext.dependencies
+HashMap<String, String> testDependencies = rootProject.ext.testDependencies
+HashMap<String, String> application = rootProject.ext.application
+HashMap<String, String> versions = rootProject.ext.versions
+
+android {
+    compileSdkVersion versions.compileSdk
+
+    configurations.all {
+        resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
+    }
+
+    defaultConfig {
+        applicationId "com.haroldolivieri.fluent.todolist"
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
+        versionCode application.versionCode
+        versionName application.versionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            testCoverageEnabled = false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            testCoverageEnabled = true
+        }
+    }
+
+    testOptions {
+        unitTests {
+            returnDefaultValues = true
+        }
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+    }
+
+    buildToolsVersion '27.0.3'
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation baseDependencies.kotlin_std_lib
+
+    implementation baseDependencies.dagger2
+    implementation baseDependencies.dagger2_android_support
+    kapt baseDependencies.dagger2_compiler
+    kapt baseDependencies.dagger2_android_processor
+
+    implementation baseDependencies.rx_java
+    implementation baseDependencies.gson
+
+    implementation baseDependencies.app_compat
+    implementation baseDependencies.card_view
+    implementation baseDependencies.constraint_layout
+    implementation baseDependencies.support_design
+    implementation baseDependencies.support_annotations
+
+    implementation baseDependencies.calligraphy
+    implementation baseDependencies.glide
+    implementation baseDependencies.fluent
+
+    testImplementation testDependencies.junit
+    testImplementation testDependencies.mockito
+    testImplementation testDependencies.hamcrest
+    testImplementation testDependencies.roboletric
+    testImplementation(testDependencies.powermock_mockito) {
+        exclude group: 'org.objenesis'
+    }
+    testImplementation(testDependencies.powermock_junit)
+
+    testImplementation baseDependencies.dagger2
+    testImplementation(baseDependencies.dagger2_android_support, {
+        exclude group: 'com.android.support'
+    })
+    kaptTest baseDependencies.dagger2_compiler
+    kaptTest baseDependencies.dagger2_android_processor
+}
+
+repositories {
+    mavenCentral()
+}
+
+android.applicationVariants.all {
+    def aptOutputDir = new File(buildDir, "generated/source/kapt/${it.unitTestVariant.dirName}")
+    it.unitTestVariant.addJavaSourceFoldersToModel(aptOutputDir)
+}
+
