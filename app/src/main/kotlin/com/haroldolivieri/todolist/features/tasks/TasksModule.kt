@@ -9,6 +9,8 @@ import java.util.*
 
 @Module
 class TasksModule {
+    @Provides
+    fun provideView(activity: TasksListActivity) : TasksView = activity
 
     @Provides
     fun provideReadFromDatabaseJob(taskStore: Store<TasksState>) : Job<Date> = TasksJob(taskStore)
