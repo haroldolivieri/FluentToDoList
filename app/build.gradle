@@ -74,6 +74,8 @@ dependencies {
     implementation baseDependencies.glide
     implementation baseDependencies.fluent
 
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.21"
+
     testImplementation testDependencies.junit
     testImplementation testDependencies.mockito
     testImplementation testDependencies.hamcrest
@@ -98,5 +100,11 @@ repositories {
 android.applicationVariants.all {
     def aptOutputDir = new File(buildDir, "generated/source/kapt/${it.unitTestVariant.dirName}")
     it.unitTestVariant.addJavaSourceFoldersToModel(aptOutputDir)
+}
+
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
 }
 
