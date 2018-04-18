@@ -12,7 +12,6 @@ import javax.inject.Inject
 class TasksJob
 @Inject constructor(private val taskStore: Store<TasksState>) : Job<Date> {
     override fun run(input: Date) {
-        //read tasks from database
         launch(CommonPool) {
             delay(3000)
             taskStore.update(taskStore.state().setType(StateType.Initial))

@@ -16,5 +16,8 @@ class TasksModule {
     fun provideStore(): Store<TasksState> = TasksStore(TasksState())
 
     @Provides
-    fun provideTaskHub(taskJob: TasksJob) : Hub<TasksView> = TasksHub(taskJob)
+    fun provideJob(store: Store<TasksState>) : Job<Date> = TasksJob(store)
+
+    @Provides
+    fun provideTaskHub(taskJob: Job<@JvmSuppressWildcards Date>) : Hub<TasksView> = TasksHub(taskJob)
 }

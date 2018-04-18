@@ -1,4 +1,4 @@
-package com.haroldolivieri.todolist.features.domain
+package com.haroldolivieri.todolist.domain
 
 import java.util.*
 
