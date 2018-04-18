@@ -7,6 +7,7 @@ import com.haroldolivieri.todolist.R
 import dagger.android.support.DaggerAppCompatActivity
 import io.fluent.Hub
 import io.fluent.StateType
+import io.fluent.Store
 import io.fluent.View
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.experimental.runBlocking
@@ -16,17 +17,13 @@ interface TasksView: View<TasksState>
 
 class TasksListActivity : DaggerAppCompatActivity(), TasksView {
 
-    private val store = TasksStore(TasksState())
-    @Inject lateinit var hub : Hub<TasksView>
+    @Inject lateinit var store: Store<TasksState>
+    @Inject lateinit var hub : Hub<@JvmSuppressWildcards TasksView>
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        runBlocking {
-            bind(store.produceStates().receive())
-        }
 
         hub.connect(this)
     }

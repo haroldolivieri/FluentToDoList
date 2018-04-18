@@ -13,8 +13,11 @@ class TasksModule {
     fun provideView(activity: TasksListActivity) : TasksView = activity
 
     @Provides
-    fun provideReadFromDatabaseJob(taskStore: Store<TasksState>) : Job<Date> = TasksJob(taskStore)
+    fun provideStore(): Store<TasksState> = TasksStore(TasksState())
 
     @Provides
-    fun provideTaskHub(taskJob: Job<Date>) : Hub<TasksView> = TasksHub(taskJob)
+    fun provideJob(store: Store<TasksState>) : Job<Date> = TasksJob(store)
+
+    @Provides
+    fun provideTaskHub(taskJob: Job<@JvmSuppressWildcards Date>) : Hub<TasksView> = TasksHub(taskJob)
 }
