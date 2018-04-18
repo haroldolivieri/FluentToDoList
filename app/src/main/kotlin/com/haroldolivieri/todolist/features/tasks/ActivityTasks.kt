@@ -17,7 +17,7 @@ interface TasksView: View<TasksState>
 class TasksListActivity : DaggerAppCompatActivity(), TasksView {
 
     private val store = TasksStore(TasksState())
-    @Inject lateinit var hub : Hub<TasksView>
+    @Inject lateinit var hub : Hub<@JvmSuppressWildcards TasksView>
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -5,7 +5,7 @@ import java.util.*
 import javax.inject.Inject
 
 class TasksHub
-@Inject constructor(private val readTasksJob : Job<Date>) : Hub<TasksView> {
+@Inject constructor(private val readTasksJob : TasksJob) : Hub<TasksView> {
     override fun connect(view: TasksView) {
         readTasksJob.run(Date())
     }
